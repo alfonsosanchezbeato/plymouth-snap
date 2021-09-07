@@ -44,3 +44,11 @@ parts:
           usr/share/plymouth/themes/default.plymouth
       ln -sf /usr/share/plymouth/themes/ubuntu-text/ubuntu-text.plymouth \
           usr/share/plymouth/themes/text.plymouth
+      # Leave only the font used by ubuntu-logo theme
+      rm -rf usr/share/fonts/truetype/dejavu/
+      mv usr/share/fonts/truetype/ubuntu/Ubuntu-R.ttf .
+      rm -f usr/share/fonts/truetype/ubuntu/*
+      mv Ubuntu-R.ttf usr/share/fonts/truetype/ubuntu/
+      # Remove more unneeded parts
+      rm -rf usr/bin/
+      rm -rf usr/share/X11/ usr/share/libthai/
