@@ -36,6 +36,7 @@ parts:
   plymouth:
     plugin: nil
     stage-packages:
+      - fonts-ubuntu
       - plymouth
       - plymouth-theme-ubuntu-logo
       - plymouth-theme-ubuntu-text
