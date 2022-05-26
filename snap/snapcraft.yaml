@@ -1,17 +1,17 @@
 name: plymouth
-base: core20
+base: core22
 version: '0.1'
 summary: Plymouth snap - just for debugging purposes
 description: |
   Plymouth snap - just for debugging purposes
   Remember to remove serial devices from kernel command line to get graphis.
   Run with:
-    sudo plymouth.plymouthd --no-daemon --debug
+    sudo plymouth.plymouthd --no-daemon --debug --ignore-serial-consoles --kernel-command-line=splash
   Then from other terminal:
     sudo plymouth show-splash
     sudo plymouth display-message --text="Hello world"
 
-grade: devel
+grade: stable
 confinement: devmode
 
 package-repositories:
