@@ -25,6 +25,8 @@ layout:
     symlink: $SNAP/usr/share/fonts/truetype
   /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/plymouth:
     symlink: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/plymouth
+  /usr/lib/plymouth:
+    symlink: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/plymouth
 
 apps:
   plymouthd:
