@@ -37,6 +37,15 @@ fun message_callback (message)
     text_sprite.SetPosition(text.x, text.y, 2000);
 }
 
+# Called 50 times every second.
+# NOTE: if a refresh function is not set, Plymouth doesn't seem to be able to
+#       update the screen correctly
+fun refresh_callback ()
+{
+    logo.sprite.SetPosition (logo.x, logo.y, logo.z);
+    logo.sprite.SetOpacity (1);
+}
+
 white.red = 1.0;
 white.green = 1.0;
 white.blue = 1.0;
@@ -54,7 +63,8 @@ logo.height = logo.image.GetHeight ();
 logo.x = Window.GetX () + Window.GetWidth () / 2 - logo.width / 2;
 logo.y = Window.GetY () + Window.GetHeight () / 2 - logo.height;
 logo.z = 0;
-logo.sprite.SetPosition (logo.x, logo.y, logo.z);
-logo.sprite.SetOpacity (1);
+
+refresh_callback();
 
 Plymouth.SetMessageFunction (message_callback);
+Plymouth.SetRefreshFunction (refresh_callback);
