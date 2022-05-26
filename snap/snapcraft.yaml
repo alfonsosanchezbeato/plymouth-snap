@@ -30,9 +30,9 @@ layout:
 
 apps:
   plymouthd:
-    command: sbin/plymouthd
+    command: usr/sbin/plymouthd
   plymouth:
-    command: bin/plymouth
+    command: usr/bin/plymouth
 
 parts:
   plymouth:
