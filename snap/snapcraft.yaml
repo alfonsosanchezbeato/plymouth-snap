@@ -82,31 +82,53 @@ parts:
       autoconf
       automake
       snapcraftctl build
-      cp -a themes/ubuntu-text "$SNAPCRAFT_PART_INSTALL"/usr/share/plymouth/themes/
-      cp -a themes/ubuntu-logo "$SNAPCRAFT_PART_INSTALL"/usr/share/plymouth/themes/
+      #cp -a themes/ubuntu-text "$SNAPCRAFT_PART_INSTALL"/usr/share/plymouth/themes/
+      #cp -a themes/ubuntu-logo "$SNAPCRAFT_PART_INSTALL"/usr/share/plymouth/themes/
+      rm -rf "$SNAPCRAFT_PART_INSTALL"/usr/share/plymouth/themes/*
+      rm -rf "$SNAPCRAFT_PART_INSTALL"/usr/libexec
+      rm -rf "$SNAPCRAFT_PART_INSTALL"/usr/lib/*/libbrotlienc.*
+      rm -rf "$SNAPCRAFT_PART_INSTALL"/usr/lib/*/libply-boot-client.*
+      rm -rf "$SNAPCRAFT_PART_INSTALL"/usr/lib/*/pkgconfig
+      rm -rf "$SNAPCRAFT_PART_INSTALL"/usr/lib/*/plymouth/label.*
+      rm -rf "$SNAPCRAFT_PART_INSTALL"/usr/lib/*/plymouth/details.*
+      rm -rf "$SNAPCRAFT_PART_INSTALL"/usr/lib/*/plymouth/fade-throbber.*
+      rm -rf "$SNAPCRAFT_PART_INSTALL"/usr/lib/*/plymouth/text.*
+      rm -rf "$SNAPCRAFT_PART_INSTALL"/usr/lib/*/plymouth/space-flares.*
+      rm -rf "$SNAPCRAFT_PART_INSTALL"/usr/lib/*/plymouth/tribar.*
+      rm -rf "$SNAPCRAFT_PART_INSTALL"/usr/lib/*/plymouth/two-step.*
+      rm -rf "$SNAPCRAFT_PART_INSTALL"/usr/lib/*/plymouth/ubuntu-text.*
+      rm -rf "$SNAPCRAFT_PART_INSTALL"/usr/lib/*/plymouth/renderers/x11.*
+      strip "$SNAPCRAFT_PART_INSTALL"/usr/lib/*/plymouth/renderers/*.so
+      strip "$SNAPCRAFT_PART_INSTALL"/usr/lib/*/plymouth/*.so
     override-prime: |
       set -ex
       snapcraftctl prime
-      cp usr/share/plymouth/themes/ubuntu-text/ubuntu-text.plymouth.in \
-          usr/share/plymouth/themes/ubuntu-text/ubuntu-text.plymouth
-      ln -sf /usr/share/plymouth/themes/ubuntu-logo/ubuntu-logo.plymouth \
-          usr/share/plymouth/themes/default.plymouth
-      ln -sf /usr/share/plymouth/themes/ubuntu-text/ubuntu-text.plymouth \
-          usr/share/plymouth/themes/text.plymouth
+      # cp usr/share/plymouth/themes/ubuntu-text/ubuntu-text.plymouth.in \
+      #     usr/share/plymouth/themes/ubuntu-text/ubuntu-text.plymouth
+      # ln -sf /usr/share/plymouth/themes/ubuntu-logo/ubuntu-logo.plymouth \
+      #     usr/share/plymouth/themes/default.plymouth
+      # ln -sf /usr/share/plymouth/themes/ubuntu-text/ubuntu-text.plymouth \
+      #     usr/share/plymouth/themes/text.plymouth
       # Leave only the font used by ubuntu-logo theme
       rm -rf usr/share/fonts/truetype/dejavu/
       mv usr/share/fonts/truetype/ubuntu/Ubuntu-R.ttf .
       rm -f usr/share/fonts/truetype/ubuntu/*
       # This is the default font for label-ft
       cp Ubuntu-R.ttf usr/share/fonts/Plymouth.ttf
-
       mv Ubuntu-R.ttf usr/share/fonts/truetype/ubuntu/
-      # Remove more unneeded parts
-      rm -rf usr/share/X11/ usr/share/libthai/
 
       # Use ubuntu-core theme
       printf "[Daemon]\nTheme=ubuntu-core\nShowDelay=0\nDeviceTimeout=8\n" > \
           usr/share/plymouth/plymouthd.defaults
+
+      # Clean-ups
+      find . -name '*.a' | xargs rm
+      find . -name '*.la' | xargs rm
+      rm -rf usr/share/X11/ usr/share/libthai/
+      rm -rf usr/share/locale/ lib/systemd/ etc/logrotate.d/ lib/ var/
+      rm -rf usr/include/ usr/sbin/plymouth-set-default-theme
+      rm -rf usr/share/doc usr/share/doc-base usr/share/lintian usr/share/man
+      strip usr/lib/*/* usr/bin/* usr/sbin/* || true
 
   themes:
     plugin: dump
