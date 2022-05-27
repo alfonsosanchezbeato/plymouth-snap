@@ -36,12 +36,54 @@ apps:
 
 parts:
   plymouth:
-    plugin: nil
+    plugin: autotools
+    source: https://git.launchpad.net/~alfonsosanchezbeato/+git/plymouth
+    source-type: git
+    source-branch: jammy-test
+    build-packages:
+      - libdrm-dev
+      - libgtk-3-dev
+      - libpango1.0-dev
+      - libpng-dev
+      - libudev-dev
+      - systemd
     stage-packages:
       - fonts-ubuntu
-      - plymouth
-      - plymouth-theme-ubuntu-logo
-      - plymouth-theme-ubuntu-text
+      - libpng16-16
+      - libdrm2
+      - libfreetype6
+    autotools-configure-parameters:
+      - --prefix=/usr
+      - --includedir=/usr/include
+      - --mandir=/usr/share/man
+      - --infodir=/usr/share/info
+      - --sysconfdir=/etc
+      - --localstatedir=/var
+      - --disable-option-checking
+      - --disable-silent-rules
+      - --libdir=/usr/lib/$SNAPCRAFT_ARCH_TRIPLET
+      - --runstatedir=/run
+      - --disable-maintainer-mode
+      - --disable-dependency-tracking SYSTEMD_ASK_PASSWORD_AGENT=/bin/systemd-tty-ask-password-agent
+      - --with-runtimedir=/run
+      - --enable-pango
+      - --enable-freetype
+      - --enable-systemd-integration
+      - --enable-static
+      - --enable-tracing
+      - --with-background-color=0x2c001e
+      - --with-background-start-color-stop=0x2c001e
+      - --with-background-end-color-stop=0x2c001e
+      - --with-logo=/usr/share/plymouth/ubuntu-logo.png
+      - --with-release-file=/etc/os-release
+      - --without-system-root-install
+      - --without-rhgb-compat-link
+    override-build: |
+      autoconf
+      automake
+      snapcraftctl build
+      cp -a themes/ubuntu-text "$SNAPCRAFT_PART_INSTALL"/usr/share/plymouth/themes/
+      cp -a themes/ubuntu-logo "$SNAPCRAFT_PART_INSTALL"/usr/share/plymouth/themes/
     override-prime: |
       set -ex
       snapcraftctl prime
