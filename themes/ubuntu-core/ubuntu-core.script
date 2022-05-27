@@ -19,11 +19,14 @@
 
 fun WriteText(text, colour)
 {
+    # It looks like label-ft cannot handle well setting the font this way?
+    # We let it use defaults.
     # Ubuntu Font
-    font = "Ubuntu, sans-serif 16";
-    font_alignment = "center";
-    image = Image.Text(text, colour.red, colour.green, colour.blue, color.alpha,
-                       font, font_alignment);
+    # font = "Ubuntu, sans-serif 16";
+    # font_alignment = "center";
+    # image = Image.Text(text, colour.red, colour.green, colour.blue, colour.alpha,
+    #                    font, font_alignment);
+    image = Image.Text(text, colour.red, colour.green, colour.blue, colour.alpha);
     return image;
 }
 
@@ -34,7 +37,13 @@ fun message_callback(message)
     text.x = Window.GetX() + (Window.GetWidth() - text_img.GetWidth())/2;
     text.y = Window.GetY() + 7*Window.GetHeight()/8 - text_img.GetHeight()/2;
     text_sprite.SetImage(text_img);
+    # x,y,z position
     text_sprite.SetPosition(text.x, text.y, 2000);
+
+    # debug_img = Image.Text("Width: " + text_img.GetWidth(),
+    #                  white.red, white.green, white.blue, white.alpha);
+    # debug_sprite.SetImage(debug_img);
+    # debug_sprite.SetPosition(Window.GetX()+10,Window.GetY() + 10, 2000);
 }
 
 # Called 50 times every second.
@@ -66,6 +75,7 @@ white.blue = 1.0;
 
 # Warning: Sprites need to be global variables, apparently
 text_sprite = Sprite();
+#debug_sprite = Sprite();
 
 logo_filename = "ubuntu-core.png";
 logo.image = Image(logo_filename);
