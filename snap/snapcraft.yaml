@@ -23,10 +23,10 @@ layout:
     symlink: $SNAP/usr/share/plymouth
   /usr/share/fonts:
     bind: $SNAP/usr/share/fonts
-  /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/plymouth:
-    symlink: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/plymouth
+  /usr/lib/$CRAFT_ARCH_TRIPLET/plymouth:
+    symlink: $SNAP/usr/lib/$CRAFT_ARCH_TRIPLET/plymouth
   /usr/lib/plymouth:
-    symlink: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/plymouth
+    symlink: $SNAP/usr/lib/$CRAFT_ARCH_TRIPLET/plymouth
 
 apps:
   plymouthd:
@@ -47,6 +47,7 @@ parts:
       - libpng-dev
       - libudev-dev
       - systemd
+      - gettext
     stage-packages:
       - fonts-ubuntu
       - libpng16-16
@@ -61,10 +62,11 @@ parts:
       - --localstatedir=/var
       - --disable-option-checking
       - --disable-silent-rules
-      - --libdir=/usr/lib/$SNAPCRAFT_ARCH_TRIPLET
+      - --libdir=/usr/lib/$CRAFT_ARCH_TRIPLET
       - --runstatedir=/run
       - --disable-maintainer-mode
       - --disable-dependency-tracking SYSTEMD_ASK_PASSWORD_AGENT=/bin/systemd-tty-ask-password-agent
+      - --disable-documentation
       - --with-runtimedir=/run
       - --enable-pango
       - --enable-freetype
@@ -82,24 +84,24 @@ parts:
       autoconf
       automake
       snapcraftctl build
-      #cp -a themes/ubuntu-text "$SNAPCRAFT_PART_INSTALL"/usr/share/plymouth/themes/
-      #cp -a themes/ubuntu-logo "$SNAPCRAFT_PART_INSTALL"/usr/share/plymouth/themes/
-      rm -rf "$SNAPCRAFT_PART_INSTALL"/usr/share/plymouth/themes/*
-      rm -rf "$SNAPCRAFT_PART_INSTALL"/usr/libexec
-      rm -rf "$SNAPCRAFT_PART_INSTALL"/usr/lib/*/libbrotlienc.*
-      rm -rf "$SNAPCRAFT_PART_INSTALL"/usr/lib/*/libply-boot-client.*
-      rm -rf "$SNAPCRAFT_PART_INSTALL"/usr/lib/*/pkgconfig
-      rm -rf "$SNAPCRAFT_PART_INSTALL"/usr/lib/*/plymouth/label.*
-      rm -rf "$SNAPCRAFT_PART_INSTALL"/usr/lib/*/plymouth/details.*
-      rm -rf "$SNAPCRAFT_PART_INSTALL"/usr/lib/*/plymouth/fade-throbber.*
-      rm -rf "$SNAPCRAFT_PART_INSTALL"/usr/lib/*/plymouth/text.*
-      rm -rf "$SNAPCRAFT_PART_INSTALL"/usr/lib/*/plymouth/space-flares.*
-      rm -rf "$SNAPCRAFT_PART_INSTALL"/usr/lib/*/plymouth/tribar.*
-      rm -rf "$SNAPCRAFT_PART_INSTALL"/usr/lib/*/plymouth/two-step.*
-      rm -rf "$SNAPCRAFT_PART_INSTALL"/usr/lib/*/plymouth/ubuntu-text.*
-      rm -rf "$SNAPCRAFT_PART_INSTALL"/usr/lib/*/plymouth/renderers/x11.*
-      strip "$SNAPCRAFT_PART_INSTALL"/usr/lib/*/plymouth/renderers/*.so
-      strip "$SNAPCRAFT_PART_INSTALL"/usr/lib/*/plymouth/*.so
+      #cp -a themes/ubuntu-text "$CRAFT_PART_INSTALL"/usr/share/plymouth/themes/
+      #cp -a themes/ubuntu-logo "$CRAFT_PART_INSTALL"/usr/share/plymouth/themes/
+      rm -rf "$CRAFT_PART_INSTALL"/usr/share/plymouth/themes/*
+      rm -rf "$CRAFT_PART_INSTALL"/usr/libexec
+      rm -rf "$CRAFT_PART_INSTALL"/usr/lib/*/libbrotlienc.*
+      rm -rf "$CRAFT_PART_INSTALL"/usr/lib/*/libply-boot-client.*
+      rm -rf "$CRAFT_PART_INSTALL"/usr/lib/*/pkgconfig
+      rm -rf "$CRAFT_PART_INSTALL"/usr/lib/*/plymouth/label.*
+      rm -rf "$CRAFT_PART_INSTALL"/usr/lib/*/plymouth/details.*
+      rm -rf "$CRAFT_PART_INSTALL"/usr/lib/*/plymouth/fade-throbber.*
+      rm -rf "$CRAFT_PART_INSTALL"/usr/lib/*/plymouth/text.*
+      rm -rf "$CRAFT_PART_INSTALL"/usr/lib/*/plymouth/space-flares.*
+      rm -rf "$CRAFT_PART_INSTALL"/usr/lib/*/plymouth/tribar.*
+      rm -rf "$CRAFT_PART_INSTALL"/usr/lib/*/plymouth/two-step.*
+      rm -rf "$CRAFT_PART_INSTALL"/usr/lib/*/plymouth/ubuntu-text.*
+      rm -rf "$CRAFT_PART_INSTALL"/usr/lib/*/plymouth/renderers/x11.*
+      strip "$CRAFT_PART_INSTALL"/usr/lib/*/plymouth/renderers/*.so
+      strip "$CRAFT_PART_INSTALL"/usr/lib/*/plymouth/*.so
     override-prime: |
       set -ex
       snapcraftctl prime
