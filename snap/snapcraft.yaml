@@ -10,6 +10,7 @@ description: |
   Then from other terminal:
     sudo plymouth show-splash
     sudo plymouth display-message --text="Hello world"
+    sudo plymouth quit
 
 grade: stable
 confinement: devmode
