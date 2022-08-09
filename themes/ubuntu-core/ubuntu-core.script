@@ -1,6 +1,6 @@
 #  ubuntu-core.script - boot splash plugin
 # 
-#  Copyright (C) 2021 Canonical Ltd.
+#  Copyright (C) 2022 Canonical Ltd.
 # 
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -19,15 +19,11 @@
 
 fun WriteText(text, colour)
 {
-    # It looks like label-ft cannot handle well setting the font this way?
-    # We let it use defaults.
     # Ubuntu Font
-    # font = "Ubuntu, sans-serif 16";
-    # font_alignment = "center";
-    # image = Image.Text(text, colour.red, colour.green, colour.blue, colour.alpha,
-    #                    font, font_alignment);
-    image = Image.Text(text, colour.red, colour.green, colour.blue, colour.alpha);
-    return image;
+    font = "Ubuntu, sans-serif 16";
+    font_alignment = "center";
+    image = Image.Text(text, colour.red, colour.green, colour.blue, colour.alpha,
+                       font, font_alignment);
 }
 
 fun message_callback(message)
@@ -35,7 +31,7 @@ fun message_callback(message)
     text_img = WriteText(message, white);
     # Text centered in last quarter of the screen
     text.x = Window.GetX() + (Window.GetWidth() - text_img.GetWidth())/2;
-    text.y = Window.GetY() + 7*Window.GetHeight()/8 - text_img.GetHeight()/2;
+    text.y = Window.GetY() + 7*Window.GetHeight()/8 - text_img.GetHeight() - 10;
     text_sprite.SetImage(text_img);
     # x,y,z position
     text_sprite.SetPosition(text.x, text.y, 2000);
@@ -67,6 +63,12 @@ fun refresh_callback()
     spin.sprite.SetImage(spin.image);
     spin.sprite.SetPosition(spin.x, spin.y, spin.z);
     spin.sprite.SetOpacity(1);
+
+    if (uc_logo.raw_image != NULL) {
+        uc_logo.sprite.SetImage(uc_logo.image);
+        uc_logo.sprite.SetPosition(uc_logo.x, uc_logo.y, uc_logo.z);
+        uc_logo.sprite.SetOpacity(1);
+    }
 }
 
 white.red = 1.0;
@@ -77,8 +79,24 @@ white.blue = 1.0;
 text_sprite = Sprite();
 #debug_sprite = Sprite();
 
-logo_filename = "ubuntu-core.png";
-logo.image = Image(logo_filename);
+logo.raw_image = Image("vendor-logo.png");
+uc_logo.raw_image = NULL;
+if (logo.raw_image == NULL) {
+    logo.raw_image = Image("ubuntu-core.png");
+} else {
+    uc_logo.raw_image = Image("ubuntu-core.png");
+    uc_logo_w = Window.GetWidth()/5;
+    uc_logo.image = uc_logo.raw_image.Scale(uc_logo_w,
+                        uc_logo_w*uc_logo.raw_image.GetHeight()/uc_logo.raw_image.GetWidth());
+    uc_logo.sprite = Sprite();
+    # Logo touching the top and in the last 8th of the screen
+    uc_logo.x = Window.GetX() + Window.GetWidth()/2 - uc_logo.image.GetWidth()/2;
+    uc_logo.y = Window.GetY() + 7*Window.GetHeight()/8;
+    uc_logo.z = 100;
+}
+
+logo_w = 2*Window.GetWidth()/3;
+logo.image = logo.raw_image.Scale(logo_w, logo_w*logo.raw_image.GetHeight()/logo.raw_image.GetWidth());
 logo.sprite = Sprite();
 # Logo right on top of the low-half of the screen
 logo.x = Window.GetX() + Window.GetWidth()/2 - logo.image.GetWidth()/2;
